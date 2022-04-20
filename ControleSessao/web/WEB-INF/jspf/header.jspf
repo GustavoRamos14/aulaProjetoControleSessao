@@ -1,0 +1,48 @@
+<%-- any content can be specified here e.g.: --%>
+<%@ page pageEncoding="UTF-8" %>
+
+<% String error = null;
+    if(request.getParameter("login") != null){ 
+        try {
+            if (request.getParameter("username").equals(null) || 
+                request.getParameter("username").isEmpty() ||
+                request.getParameter("password").equals(null) || 
+                request.getParameter("password").isEmpty()){
+                error = "Usuário/Senha não pode ser nulo!";
+            } else {
+                String userName = request.getParameter("username");
+                session.setAttribute("username", userName);
+                response.sendRedirect(request.getRequestURI());
+            }
+        } catch (Exception e) {
+            error = "Falha na rotina de autenticação de usuário!";
+        }
+    } else if(request.getParameter("logout") != null){
+       session.removeAttribute("username");
+       session.removeAttribute("lista");
+       response.sendRedirect(request.getRequestURI());
+       error = null;
+    }
+    String authUserName = (String) session.getAttribute("username");
+%>
+
+<div >
+<h1>GustavoApp</h1>
+<form method="post" style="position: absolute; top: 10px; right: 10px">
+    <% if(authUserName != null){ %>
+    Bem vindo, <%= authUserName %>
+    <input type="submit" name="logout" value="SAIR">
+    <% } %>
+</form>
+</div>
+ 
+<nav >
+    <div >
+        <div >
+            <a  href="index.jsp">Início 
+                <span>(Página atual)</span></a>
+            <a  href="about.jsp">Sobre</a>
+        </div>
+    </div>
+</nav><hr/>
+        
